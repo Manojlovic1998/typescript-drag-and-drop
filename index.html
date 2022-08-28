@@ -5,25 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Project Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="app.css" />
     <script src="dist/app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous" defer></script>
   </head>
   <body>
     <template id="project-input">
-      <form>
-        <div class="form-control">
+      <form class="form">
+        <div class="form-group mt-3">
           <label for="title">Title</label>
-          <input type="text" id="title" />
+          <input type="text" id="title" class="form-control"/>
         </div>
-        <div class="form-control">
+        <div class="form-group mt-3">
           <label for="description">Description</label>
-          <textarea id="description" rows="3"></textarea>
+          <textarea id="description" rows="3" class="form-control"></textarea>
         </div>
-        <div class="form-control">
+        <div class="form-group mt-3">
           <label for="people">People</label>
-          <input type="number" id="people" step="1" min="0" max="10" />
+          <input type="number" id="people" step="1" min="0" max="10" class="form-control"/>
         </div>
-        <button type="submit">ADD PROJECT</button>
+        <button type="submit" class="btn btn-primary mt-4">Add Project</button>
       </form>
     </template>
     <template id="single-project">
@@ -37,6 +39,6 @@
         <ul></ul>
       </section>
     </template>
-    <div id="app"></div>
+    <div id="app" class="container py-5"></div>
   </body>
 </html>
