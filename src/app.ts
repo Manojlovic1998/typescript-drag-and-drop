@@ -170,8 +170,16 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void;
 }
 
+// ProjectList Class
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+  assignedProjects: Project[];
+  constructor(private type: "active" | "finished") {
+    super("project-list", "app", false, `${type}-projects`);
+    // List Configuration
+    this.assignedProjects = [];
+    this.configure();
 
-    this.attach();
+    // Render List
     this.renderContent();
   }
 
@@ -189,14 +197,26 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
     }
   }
 
-  private renderContent() {
+  configure() {
+    projectState.addListener((projects: Project[]) => {
+      // Project filtering based on List instance type
+      const relevantProjects = projects.filter((prj) => {
+        if (this.type === "active") {
+          return prj.status === ProjectStatus.Active;
+        }
+
+        return prj.status === ProjectStatus.Finished;
+      });
+
+      this.assignedProjects = relevantProjects;
+      this.renderProjects();
+    });
+  }
+
+  renderContent() {
     const listId = `${this.type}-projects-list`;
     this.element.querySelector("ul")!.id = listId;
     this.element.querySelector("h2")!.textContent = this.type + " Projects";
-  }
-
-  private attach(): void {
-    this.hostElement.insertAdjacentElement("beforeend", this.element);
   }
 }
 
