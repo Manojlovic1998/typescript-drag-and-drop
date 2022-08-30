@@ -1,0 +1,26 @@
+:root {
+  --bg-primary: rgba(13, 110, 253);
+  --bg-success: rgba(25, 135, 84);
+  --bg-success-25: rgba(25, 135, 84, 25%);
+  --bg-primary-25: rgba(13, 110, 253, 25%);
+}
+
+section#active-projects > header {
+  background-color: var(--bg-primary);
+  color: white;
+}
+
+section#active-projects > ul {
+  background-color: var(--bg-primary-25);
+  padding: 10px 0px;
+}
+
+section#finished-projects > header {
+  background-color: var(--bg-success);
+  color: white;
+}
+
+section#finished-projects > ul {
+  background-color: var(--bg-success-25);
+  padding: 10px 0px;
+}
