@@ -16,9 +16,11 @@ class Project {
 }
 
 // Project State Management Class
+type Listener = (items: Project[]) => void;
+
 class ProjectState {
   // List of function references
-  private listeners: any[] = [];
+  private listeners: Listener[] = [];
   // List of projects
   private projects: Project[] = [];
   // Singleton instance
@@ -26,7 +28,7 @@ class ProjectState {
   // Private constructor declaration
   private constructor() {}
 
-  addListener(listenerFn: Function) {
+  addListener(listenerFn: Listener) {
     this.listeners.push(listenerFn);
   }
 
@@ -146,7 +148,7 @@ class ProjectList {
     this.element = importedNode.firstElementChild as HTMLElement;
     this.element.id = `${this.type}-projects`;
 
-    projectState.addListener((projects: any[]) => {
+    projectState.addListener((projects: Project[]) => {
       this.assignedProjects = projects;
       this.renderProjects();
     });
