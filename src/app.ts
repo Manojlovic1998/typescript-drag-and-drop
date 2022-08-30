@@ -16,20 +16,25 @@ class Project {
 }
 
 // Project State Management Class
-type Listener = (items: Project[]) => void;
+type Listener<T> = (items: T[]) => void;
 
-class ProjectState {
+abstract class State<T> {
   // List of function references
-  private listeners: Listener[] = [];
+  protected listeners: Listener<T>[] = [];
+
+  addListener(listenerFn: Listener<T>) {
+    this.listeners.push(listenerFn);
+  }
+}
+
+class ProjectState extends State<Project> {
   // List of projects
   private projects: Project[] = [];
   // Singleton instance
   private static instance: ProjectState;
   // Private constructor declaration
-  private constructor() {}
-
-  addListener(listenerFn: Listener) {
-    this.listeners.push(listenerFn);
+  private constructor() {
+    super();
   }
 
   addProject(title: string, description: string, numOfPeople: number) {
