@@ -1,9 +1,26 @@
+// Project Type
+
+enum ProjectStatus {
+  Active,
+  Finished,
+}
+
+class Project {
+  constructor(
+    public id: string,
+    public title: string,
+    public description: string,
+    public people: number,
+    public status: ProjectStatus
+  ) {}
+}
+
 // Project State Management Class
 class ProjectState {
   // List of function references
   private listeners: any[] = [];
   // List of projects
-  private projects: any[] = [];
+  private projects: Project[] = [];
   // Singleton instance
   private static instance: ProjectState;
   // Private constructor declaration
@@ -15,12 +32,13 @@ class ProjectState {
 
   addProject(title: string, description: string, numOfPeople: number) {
     // Create new object with the use of func. args
-    const newProject = {
-      id: Math.random().toString(),
-      title: title,
-      description: description,
-      people: numOfPeople,
-    };
+    const newProject = new Project(
+      Math.random().toString(),
+      title,
+      description,
+      numOfPeople,
+      ProjectStatus.Active
+    );
     // Push to projects list
     this.projects.push(newProject);
     for (const listenerFn of this.listeners) {
@@ -111,7 +129,7 @@ class ProjectList {
   element: HTMLElement;
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
-  assignedProjects: any[];
+  assignedProjects: Project[];
   constructor(private type: "active" | "finished") {
     this.templateElement = <HTMLTemplateElement>(
       document.getElementById("project-list")
