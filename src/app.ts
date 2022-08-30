@@ -126,40 +126,50 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   return adjDescriptor;
 }
 
-// ProjectList Class
-class ProjectList {
-  element: HTMLElement;
+// Component Base Class
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  assignedProjects: Project[];
-  constructor(private type: "active" | "finished") {
-    this.templateElement = <HTMLTemplateElement>(
-      document.getElementById("project-list")
-    );
+  hostElement: T;
+  element: U;
 
-    this.hostElement = <HTMLDivElement>document.getElementById("app");
-    this.assignedProjects = [];
-
+  constructor(
+    templateId: string,
+    hostElementId: string,
+    insertAtStart: boolean,
+    newElementId?: string
+  ) {
+    // Template
+    this.templateElement = document.getElementById(
+      templateId
+    ) as HTMLTemplateElement;
+    // Node that will host template elements
+    this.hostElement = document.getElementById(hostElementId) as T;
+    // Creating a DocumentFragment using the templateElement content
     const importedNode = document.importNode(
       this.templateElement.content,
       true
     );
+    // Getting the first nested child of the template content
+    this.element = importedNode.firstElementChild as U;
+    // If available set the id value of the new element
+    if (newElementId) {
+      this.element.id = newElementId;
+    }
 
-    this.element = importedNode.firstElementChild as HTMLElement;
-    this.element.id = `${this.type}-projects`;
+    this.attach(insertAtStart);
+  }
 
-    projectState.addListener((projects: Project[]) => {
-      const relevantProjects = projects.filter((prj) => {
-        if (this.type === "active") {
-          return prj.status === ProjectStatus.Active;
-        }
+  private attach(insertAfterBegin: boolean): void {
+    this.hostElement.insertAdjacentElement(
+      insertAfterBegin ? "afterbegin" : "beforeend",
+      this.element
+    );
+  }
 
-        return prj.status === ProjectStatus.Finished;
-      });
+  abstract configure(): void;
+  abstract renderContent(): void;
+}
 
-      this.assignedProjects = relevantProjects;
-      this.renderProjects();
-    });
 
     this.attach();
     this.renderContent();
