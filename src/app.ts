@@ -88,7 +88,7 @@ function validate(validatableInput: Validatable) {
   ) {
     isValid =
       isValid &&
-      validatableInput.value.trim().length > validatableInput.minLength;
+      validatableInput.value.trim().length >= validatableInput.minLength;
   }
 
   if (
@@ -97,21 +97,21 @@ function validate(validatableInput: Validatable) {
   ) {
     isValid =
       isValid &&
-      validatableInput.value.trim().length < validatableInput.maxLength;
+      validatableInput.value.trim().length <= validatableInput.maxLength;
   }
 
   if (
     validatableInput.min != null &&
     typeof validatableInput.value === "number"
   ) {
-    isValid = isValid && validatableInput.value > validatableInput.min;
+    isValid = isValid && validatableInput.value >= validatableInput.min;
   }
 
   if (
     validatableInput.max != null &&
     typeof validatableInput.value === "number"
   ) {
-    isValid = isValid && validatableInput.value < validatableInput.max;
+    isValid = isValid && validatableInput.value <= validatableInput.max;
   }
 
   return isValid;
