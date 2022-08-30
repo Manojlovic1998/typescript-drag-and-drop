@@ -1,8 +1,17 @@
 // Project State Management Class
 class ProjectState {
+  // List of function references
+  private listeners: any[] = [];
+  // List of projects
   private projects: any[] = [];
+  // Singleton instance
   private static instance: ProjectState;
+  // Private constructor declaration
   private constructor() {}
+
+  addListener(listenerFn: Function) {
+    this.listeners.push(listenerFn);
+  }
 
   addProject(title: string, description: string, numOfPeople: number) {
     // Create new object with the use of func. args
@@ -14,6 +23,10 @@ class ProjectState {
     };
     // Push to projects list
     this.projects.push(newProject);
+    for (const listenerFn of this.listeners) {
+      // Returns a copy so we don't edit from the outside
+      listenerFn(this.projects.slice());
+    }
   }
 
   // Singleton getter/setter
@@ -98,12 +111,14 @@ class ProjectList {
   element: HTMLElement;
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
-
+  assignedProjects: any[];
   constructor(private type: "active" | "finished") {
     this.templateElement = <HTMLTemplateElement>(
       document.getElementById("project-list")
     );
+
     this.hostElement = <HTMLDivElement>document.getElementById("app");
+    this.assignedProjects = [];
 
     const importedNode = document.importNode(
       this.templateElement.content,
@@ -112,8 +127,26 @@ class ProjectList {
 
     this.element = importedNode.firstElementChild as HTMLElement;
     this.element.id = `${this.type}-projects`;
+
+    projectState.addListener((projects: any[]) => {
+      this.assignedProjects = projects;
+      this.renderProjects();
+    });
+
     this.attach();
     this.renderContent();
+  }
+
+  private renderProjects() {
+    const listEl = document.getElementById(
+      `${this.type}-projects-list`
+    ) as HTMLUListElement;
+
+    for (const prjItem of this.assignedProjects) {
+      const listItem = document.createElement("li");
+      listItem.textContent = prjItem.title;
+      listEl.appendChild(listItem);
+    }
   }
 
   private renderContent() {
