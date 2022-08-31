@@ -27,6 +27,10 @@ section#finished-projects > ul {
   padding: 10px 0px;
 }
 
+section#active-projects > ul.droppable {
+  background-color: var(--bg-secondary-25);
+}
+
 section#finished-projects > ul.droppable {
   background-color: var(--bg-secondary-25);
 }
