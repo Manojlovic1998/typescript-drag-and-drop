@@ -1,5 +1,6 @@
 import { Component } from "./base-components.js";
 import { autobind } from "../decorators/autobind.js";
+// import * as Validation from "..." then use member operator to access obj in logic
 import { validate, Validatable } from "../util/validation.js";
 import { projectState } from "../state/project-state.js";
 
