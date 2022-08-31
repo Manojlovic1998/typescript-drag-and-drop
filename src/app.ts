@@ -58,9 +58,17 @@ class ProjectState extends State<Project> {
     );
     // Push to projects list
     this.projects.push(newProject);
-    for (const listenerFn of this.listeners) {
-      // Returns a copy so we don't edit from the outside
-      listenerFn(this.projects.slice());
+    this.updateListeners();
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find((prj) => {
+      return prj.id === projectId;
+    });
+
+    if (project && project.status !== newStatus) {
+      project.status = newStatus;
+      this.updateListeners();
     }
   }
 
@@ -71,6 +79,13 @@ class ProjectState extends State<Project> {
     }
     this.instance = new ProjectState();
     return this.instance;
+  }
+
+  private updateListeners() {
+    for (const listenerFn of this.listeners) {
+      // Returns a copy so we don't edit from the outside
+      listenerFn(this.projects.slice());
+    }
   }
 }
 // Singleton State
@@ -255,8 +270,15 @@ class ProjectList
     }
   }
 
+  @autobind
   dropHandler(event: DragEvent): void {
-    console.log(event.dataTransfer!.getData("text/plain"));
+    const prjId = event.dataTransfer!.getData("text/plain");
+    projectState.moveProject(
+      prjId,
+      this.type === "active" ? ProjectStatus.Active : ProjectStatus.Finished
+    );
+    const listEl = this.element.querySelector("ul")!;
+    listEl.classList.remove("droppable");
   }
 
   @autobind
