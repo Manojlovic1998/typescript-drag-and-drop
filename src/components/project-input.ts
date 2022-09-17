@@ -1,8 +1,8 @@
-import { Component } from "./base-components.js";
-import { autobind } from "../decorators/autobind.js";
+import { Component } from "./base-components";
+import { autobind } from "../decorators/autobind";
 // import * as Validation from "..." then use member operator to access obj in logic
-import { validate, Validatable } from "../util/validation.js";
-import { projectState } from "../state/project-state.js";
+import { validate, Validatable } from "../util/validation";
+import { projectState } from "../state/project-state";
 
 // ProjectInput Class
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
